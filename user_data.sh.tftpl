@@ -4,7 +4,7 @@ set -euo pipefail
 
 dnf update -y
 dnf install -y java-21-amazon-corretto-headless dnf-plugins-core
-dnf copr enable -y @caddy/caddy
+dnf copr enable -y @caddy/caddy epel-9-x86_64
 dnf install -y caddy
 
 id -u nearby >/dev/null 2>&1 || useradd --system --home-dir /opt/nearby --shell /sbin/nologin nearby

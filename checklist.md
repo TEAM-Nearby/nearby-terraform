@@ -13,3 +13,8 @@
 - [x] Elastic IP 변경사항을 검증하고 적용한다.
 - [x] 실제 Elastic IP를 확인한다.
 - [x] Elastic IP 변경사항을 커밋한다.
+- [x] Caddy 도메인을 `nearby-server.p-e.kr`로 설정한다.
+- [x] Amazon Linux 2023 Caddy 설치 방식을 고친다.
+- [x] 현재 EC2의 Caddy 설정을 SSM으로 반영한다.
+- [x] HTTPS와 프록시 상태를 검증한다.
+- [x] Caddy 도메인 변경사항을 커밋한다.

@@ -5,6 +5,7 @@
 
 - Terraform state는 `nearby-terraform-state-340271093505` S3 bucket에 저장합니다.
 - Terraform state lock은 S3 backend의 `use_lockfile = true`를 사용합니다.
+- 도메인은 `nearby-server.p-e.kr`을 사용합니다.
 - EC2는 `t3.micro`, Amazon Linux 2023, Java 21, Caddy를 사용합니다.
 - EC2에는 Elastic IP를 붙이고, 도메인 DNS는 이 IP를 바라보게 합니다.
 - Caddy는 `80`과 `443`을 받고 Spring Boot `8080` 포트로 reverse proxy합니다.
@@ -33,12 +34,7 @@ terraform plan
 terraform apply
 ```
 
-도메인을 연결할 때는 `domain_name`을 넘깁니다. Caddy는 DNS가 Elastic IP를 가리키면 HTTPS 인증서를 자동 발급합니다.
-
-```bash
-terraform plan -var='domain_name=api.example.com'
-terraform apply -var='domain_name=api.example.com'
-```
+도메인은 기본값으로 `nearby-server.p-e.kr`을 사용합니다. Caddy는 DNS가 Elastic IP를 가리키면 HTTPS 인증서를 자동 발급합니다.
 
 `내도메인.한국`에서는 Terraform output의 `elastic_ip`를 A record로 등록합니다.
 

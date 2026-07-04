@@ -18,3 +18,10 @@
 - 2026-07-05 root apply 결과 Elastic IP는 `54.116.237.58`, instance id는 `i-097624a91c126abae`이다.
 - AWS `describe-addresses`에서 `54.116.237.58`이 `i-097624a91c126abae`에 연결된 것을 확인했다.
 - Elastic IP 적용 후 `terraform plan`은 `No changes`로 통과했다.
+- `nearby-server.p-e.kr`은 Caddy HTTPS 도메인으로 사용한다.
+- 2026-07-05 DNS 조회 시 `nearby-server.p-e.kr` A record는 아직 응답하지 않았다.
+- Amazon Linux 2023에서는 `dnf copr enable @caddy/caddy`가 실패하므로 `epel-9-x86_64` repo를 명시한다.
+- 이후 DNS 조회에서 `nearby-server.p-e.kr`은 `54.116.237.58`로 확인됐다.
+- SSM으로 현재 EC2에 Caddy v2.11.4를 설치하고 `/etc/caddy/Caddyfile`을 `nearby-server.p-e.kr -> 127.0.0.1:8080`으로 반영했다.
+- `curl -I http://nearby-server.p-e.kr`은 Caddy `308` HTTPS redirect를 반환했다.
+- `curl -I https://nearby-server.p-e.kr`은 유효한 TLS 연결 후 `502`를 반환했다. 이는 Spring app이 아직 `127.0.0.1:8080`에서 실행 중이지 않기 때문이다.

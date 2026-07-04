@@ -30,9 +30,9 @@ variable "app_port" {
 }
 
 variable "domain_name" {
-  description = "Domain name for Caddy automatic HTTPS. Leave empty for HTTP-only IP testing."
+  description = "Domain name for Caddy automatic HTTPS."
   type        = string
-  default     = ""
+  default     = "nearby-server.p-e.kr"
 }
 
 variable "root_volume_size" {
