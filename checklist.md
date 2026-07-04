@@ -8,3 +8,8 @@
 - [x] Root Terraform validate를 실행한다.
 - [x] 적용 전 plan 절차를 확인한다.
 - [x] 변경사항을 커밋한다.
+- [x] EC2 Elastic IP를 Terraform에 추가한다.
+- [x] Elastic IP output과 README 사용법을 갱신한다.
+- [x] Elastic IP 변경사항을 검증하고 적용한다.
+- [x] 실제 Elastic IP를 확인한다.
+- [x] Elastic IP 변경사항을 커밋한다.

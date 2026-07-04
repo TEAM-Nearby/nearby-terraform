@@ -14,3 +14,7 @@
 - root `terraform plan`은 backend bucket을 실제 생성하고 `terraform init`을 끝낸 뒤 실행해야 한다.
 - `terraform fmt -recursive -check`, `terraform -chdir=bootstrap validate`, `terraform validate`가 통과했다.
 - 최초 단일 커밋은 파일을 보존한 채 풀고, ignore, backend bootstrap, EC2 stack, usage docs로 나눠 다시 커밋한다.
+- EC2에 Elastic IP를 붙이고, `public_ip`와 `elastic_ip` output은 Elastic IP를 가리키게 한다.
+- 2026-07-05 root apply 결과 Elastic IP는 `54.116.237.58`, instance id는 `i-097624a91c126abae`이다.
+- AWS `describe-addresses`에서 `54.116.237.58`이 `i-097624a91c126abae`에 연결된 것을 확인했다.
+- Elastic IP 적용 후 `terraform plan`은 `No changes`로 통과했다.

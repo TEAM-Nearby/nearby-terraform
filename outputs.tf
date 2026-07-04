@@ -4,13 +4,17 @@ output "instance_id" {
 }
 
 output "public_ip" {
-  value = aws_instance.app.public_ip
+  value = aws_eip.app.public_ip
 }
 
 output "public_dns" {
-  value = aws_instance.app.public_dns
+  value = aws_eip.app.public_dns
+}
+
+output "elastic_ip" {
+  value = aws_eip.app.public_ip
 }
 
 output "service_url" {
-  value = var.domain_name == "" ? "http://${aws_instance.app.public_dns}" : "https://${var.domain_name}"
+  value = var.domain_name == "" ? "http://${aws_eip.app.public_ip}" : "https://${var.domain_name}"
 }

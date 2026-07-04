@@ -158,3 +158,12 @@ resource "aws_instance" "app" {
     Name = "${var.project_name}-app"
   })
 }
+
+resource "aws_eip" "app" {
+  domain   = "vpc"
+  instance = aws_instance.app.id
+
+  tags = merge(local.tags, {
+    Name = "${var.project_name}-app"
+  })
+}
