@@ -40,3 +40,21 @@ variable "root_volume_size" {
   type        = number
   default     = 20
 }
+
+variable "deploy_artifact_bucket_name" {
+  description = "S3 bucket for backend deployment artifacts."
+  type        = string
+  default     = "nearby-deploy-artifacts-340271093505"
+}
+
+variable "github_repository" {
+  description = "GitHub repository allowed to assume the deploy role."
+  type        = string
+  default     = "TEAM-Nearby/nearby-server"
+}
+
+variable "github_deploy_branches" {
+  description = "GitHub branches allowed to assume the deploy role."
+  type        = list(string)
+  default     = ["develop"]
+}

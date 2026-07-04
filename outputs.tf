@@ -18,3 +18,11 @@ output "elastic_ip" {
 output "service_url" {
   value = var.domain_name == "" ? "http://${aws_eip.app.public_ip}" : "https://${var.domain_name}"
 }
+
+output "deploy_artifact_bucket_name" {
+  value = aws_s3_bucket.deploy_artifacts.bucket
+}
+
+output "github_actions_deploy_role_arn" {
+  value = aws_iam_role.github_actions_deploy.arn
+}

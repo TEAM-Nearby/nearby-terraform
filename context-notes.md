@@ -25,3 +25,11 @@
 - SSM으로 현재 EC2에 Caddy v2.11.4를 설치하고 `/etc/caddy/Caddyfile`을 `nearby-server.p-e.kr -> 127.0.0.1:8080`으로 반영했다.
 - `curl -I http://nearby-server.p-e.kr`은 Caddy `308` HTTPS redirect를 반환했다.
 - `curl -I https://nearby-server.p-e.kr`은 유효한 TLS 연결 후 `502`를 반환했다. 이는 Spring app이 아직 `127.0.0.1:8080`에서 실행 중이지 않기 때문이다.
+- 배포 artifact bucket은 `nearby-deploy-artifacts-340271093505`로 만든다.
+- GitHub OIDC deploy role은 `nearby-github-actions-deploy`로 만들고 기본 trust 대상은 `TEAM-Nearby/nearby-server`의 `develop` 브랜치로 제한한다.
+- EC2 role `nearby-ec2`에는 배포 artifact bucket의 `s3:GetObject`만 추가한다.
+- 2026-07-05 apply 결과 배포 bucket, GitHub OIDC provider, deploy role, deploy role policy, EC2 read policy가 생성됐다.
+- deploy role ARN은 `arn:aws:iam::340271093505:role/nearby-github-actions-deploy`이다.
+- 배포 권한 적용 후 `terraform plan`은 `No changes`로 통과했다.
+- `gh repo view TEAM-Nearby/nearby-backend` 확인 결과 실제 repo는 `TEAM-Nearby/nearby-server`, 기본 브랜치는 `develop`으로 확인되어 OIDC trust 기본값을 수정했다.
+- OIDC trust 수정 apply 후 대상은 `repo:TEAM-Nearby/nearby-server:ref:refs/heads/develop`이다.

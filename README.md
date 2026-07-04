@@ -6,6 +6,8 @@
 - Terraform state는 `nearby-terraform-state-340271093505` S3 bucket에 저장합니다.
 - Terraform state lock은 S3 backend의 `use_lockfile = true`를 사용합니다.
 - 도메인은 `nearby-server.p-e.kr`을 사용합니다.
+- 배포 artifact는 `nearby-deploy-artifacts-340271093505` S3 bucket에 저장합니다.
+- GitHub Actions OIDC 배포 role은 `nearby-github-actions-deploy`입니다.
 - EC2는 `t3.micro`, Amazon Linux 2023, Java 21, Caddy를 사용합니다.
 - EC2에는 Elastic IP를 붙이고, 도메인 DNS는 이 IP를 바라보게 합니다.
 - Caddy는 `80`과 `443`을 받고 Spring Boot `8080` 포트로 reverse proxy합니다.
@@ -61,3 +63,29 @@ sudo systemctl restart nearby
 ```bash
 terraform destroy
 ```
+
+## GitHub Actions 배포 설정
+
+Repository Variables.
+
+```text
+AWS_REGION=ap-northeast-2
+AWS_ACCOUNT_ID=340271093505
+EC2_INSTANCE_ID=i-097624a91c126abae
+APP_SERVICE_NAME=nearby
+APP_DIR=/opt/nearby
+APP_JAR_PATH=/opt/nearby/app.jar
+APP_PORT=8080
+DOMAIN_NAME=nearby-server.p-e.kr
+SERVICE_URL=https://nearby-server.p-e.kr
+DEPLOY_S3_BUCKET=nearby-deploy-artifacts-340271093505
+HEALTHCHECK_PATH=/actuator/health
+```
+
+Repository Secret.
+
+```text
+AWS_ROLE_TO_ASSUME=arn:aws:iam::340271093505:role/nearby-github-actions-deploy
+```
+
+기본 OIDC trust 대상은 `TEAM-Nearby/nearby-server`의 `develop` 브랜치입니다. 다른 repo나 브랜치에서 배포하려면 `github_repository`, `github_deploy_branches` 변수를 수정합니다.

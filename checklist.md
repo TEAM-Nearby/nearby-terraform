@@ -18,3 +18,10 @@
 - [x] 현재 EC2의 Caddy 설정을 SSM으로 반영한다.
 - [x] HTTPS와 프록시 상태를 검증한다.
 - [x] Caddy 도메인 변경사항을 커밋한다.
+- [x] 배포 artifact S3 bucket을 추가한다.
+- [x] GitHub Actions OIDC provider와 deploy role을 추가한다.
+- [x] deploy role에 S3, SSM, EC2 조회 권한을 추가한다.
+- [x] EC2 role에 deploy artifact read 권한을 추가한다.
+- [x] GitHub Actions 환경 변수 문서를 갱신한다.
+- [x] 배포 권한 Terraform을 apply한다.
+- [x] 배포 권한 변경사항을 커밋하고 push한다.
