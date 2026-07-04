@@ -1,0 +1,39 @@
+#!/bin/bash
+# EC2 부팅 시 Java 21, Caddy, Spring systemd 서비스를 준비합니다.
+set -euo pipefail
+
+dnf update -y
+dnf install -y java-21-amazon-corretto-headless dnf-plugins-core
+dnf copr enable -y @caddy/caddy
+dnf install -y caddy
+
+id -u nearby >/dev/null 2>&1 || useradd --system --home-dir /opt/nearby --shell /sbin/nologin nearby
+install -d -o nearby -g nearby /opt/nearby
+
+cat >/etc/systemd/system/nearby.service <<'SERVICE'
+[Unit]
+Description=Nearby Spring Boot API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=nearby
+Group=nearby
+WorkingDirectory=/opt/nearby
+ExecStart=/usr/bin/java -jar /opt/nearby/app.jar --server.port=${app_port}
+Restart=on-failure
+RestartSec=5
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
+SERVICE
+
+cat >/etc/caddy/Caddyfile <<'CADDY'
+${caddy_site} {
+	reverse_proxy 127.0.0.1:${app_port}
+}
+CADDY
+
+systemctl daemon-reload
+systemctl enable --now caddy
