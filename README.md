@@ -99,11 +99,13 @@ AWS_ROLE_TO_ASSUME=arn:aws:iam::340271093505:role/nearby-github-actions-deploy
 
 ```text
 /nearby/prod/env/SPRING_PROFILES_ACTIVE
+/nearby/prod/env/SPRING_DATASOURCE_URL
+/nearby/prod/env/SPRING_DATASOURCE_USERNAME
+/nearby/prod/env/SPRING_DATASOURCE_PASSWORD
 /nearby/prod/env/SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+/nearby/prod/env/NEARBY_JWT_SECRET
 /nearby/prod/env/KAKAO_NATIVE_APP_KEY
 /nearby/prod/env/SOLAPI_API_KEY
 /nearby/prod/env/SOLAPI_API_SECRET
 /nearby/prod/env/SOLAPI_FROM_NUMBER
 ```
-
-Supabase 연결 값은 실제 project ref와 password를 받은 뒤 추가합니다.

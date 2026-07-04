@@ -29,3 +29,7 @@
 - [x] 실제 값이 있는 런타임 환경 변수를 SSM Parameter Store에 저장한다.
 - [x] Supabase placeholder 값은 저장하지 않고 남은 작업으로 기록한다.
 - [x] SSM env 변경사항을 검증하고 커밋한다.
+- [x] Supabase datasource와 JWT secret까지 포함해 SSM env 전체 10개를 저장한다.
+- [x] SSM env 문서를 전체 목록으로 갱신한다.
+- [x] SSM env 전체 저장 상태와 EC2 role 조회를 검증한다.
+- [x] SSM env 전체 반영 변경사항을 커밋하고 push한다.

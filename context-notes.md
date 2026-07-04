@@ -39,3 +39,6 @@
 - EC2에서 `GetParametersByPath`를 호출하려면 `/nearby/prod/env/*`뿐 아니라 `/nearby/prod/env` base path ARN도 IAM resource에 포함해야 한다.
 - SSM Parameter Store에는 실제 값이 있는 6개 항목을 저장했다. secret 계열은 SecureString, profile/pool size/from number는 String으로 저장했다.
 - EC2 role `nearby-ec2`로 `/nearby/prod/env`를 `--with-decryption` 조회했을 때 count `6`이 반환됐다.
+- Supabase datasource 실제 값과 `NEARBY_JWT_SECRET`을 받은 뒤 SSM Parameter Store 대상은 10개가 됐다.
+- `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `NEARBY_JWT_SECRET`은 secret 취급해 SecureString으로 저장한다.
+- 전체 10개 SSM env를 저장한 뒤 EC2 role `nearby-ec2`로 `/nearby/prod/env`를 `--with-decryption` 조회했을 때 count `10`이 반환됐다.
