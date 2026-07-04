@@ -1,0 +1,16 @@
+# Context Notes
+
+## 2026-07-05
+
+- AWS profile은 `nearby-terraform`이고 STS 확인 계정은 `340271093505`이다.
+- S3 backend bucket 이름은 account id를 포함해 `nearby-terraform-state-340271093505`로 고정한다.
+- Terraform S3 backend lock은 DynamoDB가 아니라 `use_lockfile = true`를 사용한다.
+- SSH는 열지 않고 EC2 instance profile에 SSM 권한을 붙여 운영 접근 여지를 남긴다.
+- 도메인이 아직 정해지지 않았으므로 Caddy site label은 `domain_name`이 비어 있으면 `:80`, 값이 있으면 해당 도메인을 사용한다.
+- 실제 AWS 비용이 생기는 `terraform apply`는 이번 자동 작업에서 실행하지 않는다.
+- EC2는 default VPC와 첫 번째 default subnet을 사용한다. 별도 VPC는 필요해질 때 추가한다.
+- Spring jar는 Terraform에 포함하지 않고 `/opt/nearby/app.jar`를 실행하는 systemd service file만 준비한다.
+- `terraform -chdir=bootstrap plan`은 S3 bucket 관련 4개 리소스 생성으로 통과했다.
+- root `terraform plan`은 backend bucket을 실제 생성하고 `terraform init`을 끝낸 뒤 실행해야 한다.
+- `terraform fmt -recursive -check`, `terraform -chdir=bootstrap validate`, `terraform validate`가 통과했다.
+- 최초 단일 커밋은 파일을 보존한 채 풀고, ignore, backend bootstrap, EC2 stack, usage docs로 나눠 다시 커밋한다.
