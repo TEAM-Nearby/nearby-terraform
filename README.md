@@ -80,6 +80,7 @@ DOMAIN_NAME=nearby-server.p-e.kr
 SERVICE_URL=https://nearby-server.p-e.kr
 DEPLOY_S3_BUCKET=nearby-deploy-artifacts-340271093505
 HEALTHCHECK_PATH=/actuator/health
+SSM_ENV_PATH=/nearby/prod/env
 ```
 
 Repository Secret.
@@ -89,3 +90,20 @@ AWS_ROLE_TO_ASSUME=arn:aws:iam::340271093505:role/nearby-github-actions-deploy
 ```
 
 기본 OIDC trust 대상은 `TEAM-Nearby/nearby-server`의 `develop` 브랜치입니다. 다른 repo나 브랜치에서 배포하려면 `github_repository`, `github_deploy_branches` 변수를 수정합니다.
+
+## 런타임 환경 변수
+
+앱 런타임 환경 변수는 SSM Parameter Store의 `/nearby/prod/env` 아래에 저장합니다. 비밀 값은 Terraform에 넣지 않습니다.
+
+현재 등록 대상입니다.
+
+```text
+/nearby/prod/env/SPRING_PROFILES_ACTIVE
+/nearby/prod/env/SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+/nearby/prod/env/KAKAO_NATIVE_APP_KEY
+/nearby/prod/env/SOLAPI_API_KEY
+/nearby/prod/env/SOLAPI_API_SECRET
+/nearby/prod/env/SOLAPI_FROM_NUMBER
+```
+
+Supabase 연결 값은 실제 project ref와 password를 받은 뒤 추가합니다.

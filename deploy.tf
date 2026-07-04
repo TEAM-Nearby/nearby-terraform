@@ -125,3 +125,26 @@ resource "aws_iam_role_policy" "app_deploy_artifact_read" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "app_runtime_env_read" {
+  name = "${var.project_name}-runtime-env-read"
+  role = aws_iam_role.app.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath",
+        ]
+        Resource = [
+          "arn:aws:ssm:${var.aws_region}:340271093505:parameter${var.runtime_env_parameter_path}",
+          "arn:aws:ssm:${var.aws_region}:340271093505:parameter${var.runtime_env_parameter_path}/*",
+        ]
+      }
+    ]
+  })
+}

@@ -58,3 +58,9 @@ variable "github_deploy_branches" {
   type        = list(string)
   default     = ["develop"]
 }
+
+variable "runtime_env_parameter_path" {
+  description = "SSM Parameter Store path for runtime environment variables."
+  type        = string
+  default     = "/nearby/prod/env"
+}

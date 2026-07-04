@@ -25,3 +25,7 @@
 - [x] GitHub Actions 환경 변수 문서를 갱신한다.
 - [x] 배포 권한 Terraform을 apply한다.
 - [x] 배포 권한 변경사항을 커밋하고 push한다.
+- [x] EC2 role에 SSM runtime env read 권한을 추가한다.
+- [x] 실제 값이 있는 런타임 환경 변수를 SSM Parameter Store에 저장한다.
+- [x] Supabase placeholder 값은 저장하지 않고 남은 작업으로 기록한다.
+- [x] SSM env 변경사항을 검증하고 커밋한다.

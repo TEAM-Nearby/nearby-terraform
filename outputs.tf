@@ -26,3 +26,7 @@ output "deploy_artifact_bucket_name" {
 output "github_actions_deploy_role_arn" {
   value = aws_iam_role.github_actions_deploy.arn
 }
+
+output "runtime_env_parameter_path" {
+  value = var.runtime_env_parameter_path
+}

@@ -33,3 +33,9 @@
 - 배포 권한 적용 후 `terraform plan`은 `No changes`로 통과했다.
 - `gh repo view TEAM-Nearby/nearby-backend` 확인 결과 실제 repo는 `TEAM-Nearby/nearby-server`, 기본 브랜치는 `develop`으로 확인되어 OIDC trust 기본값을 수정했다.
 - OIDC trust 수정 apply 후 대상은 `repo:TEAM-Nearby/nearby-server:ref:refs/heads/develop`이다.
+- 런타임 환경 변수 path는 `/nearby/prod/env`로 둔다.
+- secret 값은 Terraform state에 남기지 않고 AWS SSM Parameter Store에 직접 저장한다.
+- Supabase datasource URL, username, password는 placeholder만 있어서 실제 값을 받기 전까지 저장하지 않는다.
+- EC2에서 `GetParametersByPath`를 호출하려면 `/nearby/prod/env/*`뿐 아니라 `/nearby/prod/env` base path ARN도 IAM resource에 포함해야 한다.
+- SSM Parameter Store에는 실제 값이 있는 6개 항목을 저장했다. secret 계열은 SecureString, profile/pool size/from number는 String으로 저장했다.
+- EC2 role `nearby-ec2`로 `/nearby/prod/env`를 `--with-decryption` 조회했을 때 count `6`이 반환됐다.
