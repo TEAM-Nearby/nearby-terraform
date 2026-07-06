@@ -33,3 +33,7 @@
 - [x] SSM env 문서를 전체 목록으로 갱신한다.
 - [x] SSM env 전체 저장 상태와 EC2 role 조회를 검증한다.
 - [x] SSM env 전체 반영 변경사항을 커밋하고 push한다.
+- [x] GitHub Actions 배포 workflow와 최근 실패 로그를 확인한다.
+- [x] `develop` 브랜치에서 수동 배포 workflow를 실행한다.
+- [x] 수동 배포 workflow 결과를 확인한다.
+- [x] 외부 health check를 확인한다.

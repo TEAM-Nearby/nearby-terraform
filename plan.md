@@ -40,3 +40,11 @@ Spring Boot backend를 올릴 EC2 단일 서버 인프라를 Terraform으로 만
 2. `terraform init`.
 3. `terraform plan`.
 4. `terraform apply`.
+
+## 2026-07-06 Deployment Plan
+
+GitHub Actions `CI` workflow를 `develop`에서 수동 실행해 Spring Boot jar를 S3에 올리고 SSM으로 EC2에 반영한다.
+
+1. GitHub workflow와 최근 실패 로그를 확인한다. -> verify: 실패 단계와 원인을 기록한다.
+2. `CI` workflow를 `develop`에서 수동 실행한다. -> verify: GitHub Actions run conclusion을 확인한다.
+3. 외부 health check를 호출한다. -> verify: `https://nearby-server.p-e.kr/actuator/health` 응답을 확인한다.

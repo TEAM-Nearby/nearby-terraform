@@ -42,3 +42,17 @@
 - Supabase datasource 실제 값과 `NEARBY_JWT_SECRET`을 받은 뒤 SSM Parameter Store 대상은 10개가 됐다.
 - `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`, `NEARBY_JWT_SECRET`은 secret 취급해 SecureString으로 저장한다.
 - 전체 10개 SSM env를 저장한 뒤 EC2 role `nearby-ec2`로 `/nearby/prod/env`를 `--with-decryption` 조회했을 때 count `10`이 반환됐다.
+
+## 2026-07-06
+
+- 로컬 AWS CLI profile에는 `nearby-terraform`이 없고, 사용 가능한 `dev-kc`와 `codex-ec2-readonly`는 배포 계정 `340271093505`가 아니다.
+- `TEAM-Nearby/nearby-server`의 배포 경로는 `.github/workflows/ci.yml`의 `workflow_dispatch`이다.
+- 최근 수동 배포 run `28750446102`는 테스트, jar 빌드, S3 업로드까지 성공했고 `Deploy through SSM`에서 command id `379a4a03-3955-4dd7-acc8-c0b4905ef30a` 대기 중 타임아웃됐다.
+- 2026-07-06 수동 배포 run `28766306916`을 `develop` 브랜치에서 시작했다.
+- 수동 배포 run `28766306916`은 SSM health check에서 실패했다. 앱이 `127.0.0.1:8080`을 열지 못했다.
+- `nearby-server` workflow에 실패 시 `systemctl status nearby`와 `journalctl -u nearby`를 출력하는 커밋 `382fc5f`를 추가했다.
+- 수동 배포 run `28766867059`의 EC2 journal에서 root cause는 `Could not resolve placeholder 'nearby.storage.s3.access-key'`로 확인됐다.
+- `nearby-server`에서 S3 storage access key와 secret key를 앱 시작 필수값에서 호출 시점 검증으로 낮추는 커밋 `9ebf674`를 추가했다.
+- push CI run `28767113892`는 성공했다.
+- 수동 배포 run `28767193476`은 테스트, jar 빌드, S3 업로드, SSM 배포, 외부 health check까지 성공했다.
+- `curl https://nearby-server.p-e.kr/actuator/health`는 HTTP 200과 `{"status":"UP"}`를 반환했다. DB component도 `UP`이다.
