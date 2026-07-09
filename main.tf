@@ -154,6 +154,10 @@ resource "aws_instance" "app" {
     encrypted   = true
   }
 
+  lifecycle {
+    ignore_changes = [ami]
+  }
+
   tags = merge(local.tags, {
     Name = "${var.project_name}-app"
   })

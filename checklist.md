@@ -37,3 +37,7 @@
 - [x] `develop` 브랜치에서 수동 배포 workflow를 실행한다.
 - [x] 수동 배포 workflow 결과를 확인한다.
 - [x] 외부 health check를 확인한다.
+- [x] EC2 instance type 기본값을 `t3.small`로 올린다.
+- [x] Terraform plan으로 EC2 변경 범위를 확인한다.
+- [x] Terraform apply로 EC2 크기를 변경한다.
+- [x] 변경 후 SSM과 health check를 확인한다.

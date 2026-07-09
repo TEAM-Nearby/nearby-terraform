@@ -56,3 +56,15 @@
 - push CI run `28767113892`는 성공했다.
 - 수동 배포 run `28767193476`은 테스트, jar 빌드, S3 업로드, SSM 배포, 외부 health check까지 성공했다.
 - `curl https://nearby-server.p-e.kr/actuator/health`는 HTTP 200과 `{"status":"UP"}`를 반환했다. DB component도 `UP`이다.
+
+## 2026-07-09
+
+- SSM command `29c1d442-0ecb-4e1b-b46b-1316c33ea7f1`은 EC2에서 `aws s3 cp` 중 `ExecutionTimedOut`, `ResponseCode 137`로 종료됐다.
+- EC2 `i-097624a91c126abae`는 `t3.micro`이고 현재 `Mem available 46MiB`, `Swap 0B`였다.
+- 디스크는 20GiB 중 2.4GiB 사용이라 배포 실패 원인은 디스크가 아니라 EC2 메모리 부족으로 본다.
+- Java 서비스와 SSM agent를 같이 돌리기 위해 instance type 기본값을 `t3.small`로 올린다.
+- `data.aws_ami.al2023`가 최신 AMI를 다시 읽으면 인스턴스 타입 변경과 무관하게 EC2 교체가 발생하므로, 운영 EC2에서는 AMI drift를 무시한다.
+- `terraform apply tfplan` 결과 `aws_instance.app`만 in-place 변경됐고 리소스 교체는 없었다.
+- 적용 후 EC2는 `t3.small`, instance id는 `i-097624a91c126abae`, Elastic IP는 `54.116.237.58`로 유지됐다.
+- 적용 후 EC2 내부 메모리는 `Mem available 1.1GiB`, `Swap 0B`이고 `nearby.service`는 active 상태다.
+- 외부 health check `https://nearby-server.p-e.kr/actuator/health`와 `/actuator/health/db` 모두 `UP`을 반환했다.
