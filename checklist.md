@@ -49,7 +49,7 @@
 - [x] README의 운영 Redis 구성과 환경 변수 목록을 갱신한다.
 - [x] Terraform formatting과 validate를 실행한다.
 - [x] Terraform plan에서 신규 Redis 리소스만 생성되는지 확인한다.
-- [ ] Terraform apply로 운영 Redis를 생성한다.
-- [ ] ElastiCache 상태와 SSM 파라미터를 검증한다.
-- [ ] 백엔드를 배포하고 Redis health를 확인한다.
-- [ ] 적용 후 Terraform plan이 `No changes`인지 확인한다.
+- [x] Terraform apply로 운영 Redis를 생성한다.
+- [x] ElastiCache 상태와 SSM 파라미터를 검증한다.
+- [x] 백엔드를 배포하고 Redis health를 확인한다.
+- [x] 적용 후 Terraform plan이 `No changes`인지 확인한다.
