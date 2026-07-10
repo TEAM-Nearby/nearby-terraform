@@ -82,3 +82,13 @@
 - `nearby-prod-debug` profile은 대상 계정 `340271093505`의 `terraform` IAM 사용자이며 이번 실행의 backend와 provider override로 사용한다.
 - 적용 전 AWS 조회에서 `nearby-redis` replication group과 Redis용 SSM 파라미터 세 개는 존재하지 않았다.
 - Redis 추가 plan은 신규 리소스 6개 생성, 기존 리소스 14개 no-op, 변경 0개, 삭제 0개로 확인됐다.
+- 최초 apply에서 보안 그룹과 subnet group은 생성됐지만 ElastiCache API가 일시적인 `408 InvalidCredentialsException`을 반환했다.
+- STS 자격 증명, AWS 실제 리소스, Terraform state를 대조해 불일치가 없음을 확인하고 남은 4개 생성 plan을 다시 적용했다.
+- 재적용 후 `nearby-redis`는 `available`이며 `cache.t4g.micro` primary와 replica가 `ap-northeast-2a`, `ap-northeast-2b`에 배치됐다.
+- 자동 장애 조치, Multi-AZ, 저장 데이터 암호화, TLS required가 모두 활성화됐고 snapshot retention은 0이다.
+- Redis 보안 그룹 `sg-0aae689112067384a`는 앱 보안 그룹 `sg-0e791800e36799f09`의 `6379/tcp`만 허용하고 egress는 없다.
+- SSM Redis host는 ElastiCache primary endpoint와 일치했고 port는 `6379`, SSL enabled는 `true`로 확인됐다.
+- 백엔드 PR `#122`를 `develop`에 병합하고 수동 배포 run `29074502173`을 실행했다.
+- 배포 run은 테스트, bootJar, S3 업로드, SSM 배포, 외부 health check까지 성공했다.
+- 외부 `/actuator/health`의 `redis` component와 `/actuator/health/redis`가 모두 `UP`을 반환했다.
+- 적용과 배포 검증 후 `terraform plan -detailed-exitcode`는 exit code 0과 `No changes`를 반환했다.
