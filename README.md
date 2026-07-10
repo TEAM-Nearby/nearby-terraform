@@ -12,6 +12,8 @@
 - EC2에는 Elastic IP를 붙이고, 도메인 DNS는 이 IP를 바라보게 합니다.
 - Caddy는 `80`과 `443`을 받고 Spring Boot `8080` 포트로 reverse proxy합니다.
 - SSH ingress는 열지 않습니다. 운영 접근은 SSM을 사용합니다.
+- 운영 Redis는 ElastiCache for Valkey `cache.t4g.micro` 2노드 Multi-AZ를 사용합니다.
+- Redis `6379` 포트는 EC2 앱 보안 그룹에서만 접근할 수 있고 TLS 연결만 허용합니다.
 
 ## 처음 적용
 
@@ -103,9 +105,14 @@ AWS_ROLE_TO_ASSUME=arn:aws:iam::340271093505:role/nearby-github-actions-deploy
 /nearby/prod/env/SPRING_DATASOURCE_USERNAME
 /nearby/prod/env/SPRING_DATASOURCE_PASSWORD
 /nearby/prod/env/SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+/nearby/prod/env/SPRING_DATA_REDIS_HOST
+/nearby/prod/env/SPRING_DATA_REDIS_PORT
+/nearby/prod/env/SPRING_DATA_REDIS_SSL_ENABLED
 /nearby/prod/env/NEARBY_JWT_SECRET
 /nearby/prod/env/KAKAO_NATIVE_APP_KEY
 /nearby/prod/env/SOLAPI_API_KEY
 /nearby/prod/env/SOLAPI_API_SECRET
 /nearby/prod/env/SOLAPI_FROM_NUMBER
 ```
+
+Redis 연결 정보는 Terraform이 ElastiCache 생성 결과를 사용해 자동 등록합니다. 실제 endpoint를 GitHub Variables나 Secrets에 복사하지 않습니다.

@@ -68,3 +68,17 @@
 - 적용 후 EC2는 `t3.small`, instance id는 `i-097624a91c126abae`, Elastic IP는 `54.116.237.58`로 유지됐다.
 - 적용 후 EC2 내부 메모리는 `Mem available 1.1GiB`, `Swap 0B`이고 `nearby.service`는 active 상태다.
 - 외부 health check `https://nearby-server.p-e.kr/actuator/health`와 `/actuator/health/db` 모두 `UP`을 반환했다.
+
+## 2026-07-10
+
+- 백엔드 `develop`은 Redis를 Google Places 캐시뿐 아니라 리프레시 토큰과 휴대폰 인증 코드 저장소로 사용한다.
+- Redis 장애가 인증 흐름에 영향을 주므로 운영 Valkey는 `cache.t4g.micro` 2노드 Multi-AZ와 자동 장애 조치로 구성한다.
+- 모든 Redis key는 TTL 기반이며 오래된 인증 상태 복원 위험이 있어 자동 스냅샷은 사용하지 않는다.
+- Redis는 default VPC에 배치하고 `6379/tcp`는 앱 보안 그룹에서만 허용한다.
+- 저장 데이터 암호화와 TLS 전송 암호화를 활성화하고 애플리케이션은 SSL 연결을 사용한다.
+- 별도 AUTH 토큰은 만들지 않고 VPC, 보안 그룹, TLS로 접근을 제한해 secret을 Terraform state에 추가하지 않는다.
+- Redis endpoint는 코드나 GitHub 설정에 복사하지 않고 Terraform이 `/nearby/prod/env/SPRING_DATA_REDIS_HOST`에 자동 저장한다.
+- 백엔드 환경 변수는 `SPRING_DATA_REDIS_HOST`, `SPRING_DATA_REDIS_PORT`, `SPRING_DATA_REDIS_SSL_ENABLED`로 통일한다.
+- `nearby-prod-debug` profile은 대상 계정 `340271093505`의 `terraform` IAM 사용자이며 이번 실행의 backend와 provider override로 사용한다.
+- 적용 전 AWS 조회에서 `nearby-redis` replication group과 Redis용 SSM 파라미터 세 개는 존재하지 않았다.
+- Redis 추가 plan은 신규 리소스 6개 생성, 기존 리소스 14개 no-op, 변경 0개, 삭제 0개로 확인됐다.

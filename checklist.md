@@ -41,3 +41,15 @@
 - [x] Terraform plan으로 EC2 변경 범위를 확인한다.
 - [x] Terraform apply로 EC2 크기를 변경한다.
 - [x] 변경 후 SSM과 health check를 확인한다.
+- [x] 백엔드 Redis 설정을 host, port, SSL 환경 변수 방식으로 변경한다.
+- [x] 백엔드 전체 테스트와 bootJar 빌드를 실행한다.
+- [x] ElastiCache for Valkey 2노드 Multi-AZ를 추가한다.
+- [x] Redis 보안 그룹을 앱 보안 그룹에서만 접근 가능하게 구성한다.
+- [x] Redis host, port, SSL 값을 SSM Parameter Store에 자동 등록한다.
+- [x] README의 운영 Redis 구성과 환경 변수 목록을 갱신한다.
+- [x] Terraform formatting과 validate를 실행한다.
+- [x] Terraform plan에서 신규 Redis 리소스만 생성되는지 확인한다.
+- [ ] Terraform apply로 운영 Redis를 생성한다.
+- [ ] ElastiCache 상태와 SSM 파라미터를 검증한다.
+- [ ] 백엔드를 배포하고 Redis health를 확인한다.
+- [ ] 적용 후 Terraform plan이 `No changes`인지 확인한다.
