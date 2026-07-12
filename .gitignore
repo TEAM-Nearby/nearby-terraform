@@ -1,4 +1,5 @@
 .terraform/
+.worktrees/
 *.tfstate
 *.tfstate.*
 *.tfplan
