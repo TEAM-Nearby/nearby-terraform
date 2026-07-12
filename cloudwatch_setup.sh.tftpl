@@ -57,6 +57,14 @@ systemctl restart nearby.service
   -c file:/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-agent.json
 
 systemctl enable amazon-cloudwatch-agent.service
-systemctl is-active --quiet nearby.service
-systemctl is-active --quiet amazon-cloudwatch-agent.service
-test -f /var/log/nearby/application.log
+
+for attempt in $(seq 1 30); do
+  if systemctl is-active --quiet nearby.service && systemctl is-active --quiet amazon-cloudwatch-agent.service && test -f /var/log/nearby/application.log; then
+    exit 0
+  fi
+
+  sleep 2
+done
+
+echo "CloudWatch Logs postconditions were not ready" >&2
+exit 1
