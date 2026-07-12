@@ -60,6 +60,16 @@ sudo systemctl status nearby
 sudo systemctl restart nearby
 ```
 
+## CloudWatch Logs
+
+Spring Boot 애플리케이션 로그는 서울 리전 CloudWatch Logs의 `/nearby/prod/application` 로그 그룹에 14일간 보관합니다. 로그 스트림 이름은 EC2 instance id입니다.
+
+AWS 콘솔에서는 `CloudWatch > 로그 > 로그 그룹 > /nearby/prod/application`에서 확인합니다.
+
+```bash
+aws logs tail /nearby/prod/application --region ap-northeast-2 --since 10m --follow
+```
+
 인프라를 정리할 때는 루트 스택을 먼저 제거합니다. state bucket은 `prevent_destroy`가 걸려 있어 실수로 같이 삭제되지 않습니다.
 
 ```bash

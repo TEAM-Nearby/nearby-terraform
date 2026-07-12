@@ -103,3 +103,11 @@
 - 로그 그룹 이름은 `/nearby/prod/application`, 로그 스트림 이름은 EC2 instance id로 한다.
 - 기존 EC2를 교체하지 않고 SSM Association으로 멱등 적용하며 설정 반영 시 `nearby.service`를 한 번 재시작한다.
 - EC2 역할에는 로그 스트림 생성과 이벤트 전송에 필요한 최소 CloudWatch Logs 권한만 부여한다.
+- 최초 Terraform plan은 로그 그룹, IAM inline policy, SSM Association 3개 생성과 기존 리소스 변경 및 삭제 0개로 확인됐다.
+- 최초 apply 결과 리소스 3개가 생성됐고 EC2 instance id와 Elastic IP는 유지됐다.
+- 최초 Association은 Agent가 시작된 직후 postcondition을 한 번만 검사해 실패 상태가 됐지만, 실제 Agent 설정 검증은 성공했고 두 서비스와 로그 파일은 정상 상태였다.
+- 서비스와 로그 파일 상태를 최대 60초 동안 조건 기반으로 기다리도록 수정했고 Association 재실행 `db6600f5-2e13-4367-a896-8dc58b8462f6`은 `Success`를 반환했다.
+- `/nearby/prod/application` 로그 그룹의 보관 기간은 14일이고 `i-097624a91c126abae` 로그 스트림에서 실제 이벤트를 확인했다.
+- EC2에서 `nearby.service`와 `amazon-cloudwatch-agent.service`는 모두 active이고 `/var/log/nearby/application.log`에 로그가 기록된다.
+- 설정 적용 후 외부 `https://nearby-server.p-e.kr/actuator/health`는 DB와 Redis를 포함해 `UP`을 반환했다.
+- 최종 `terraform plan -var aws_profile=nearby-prod-debug -detailed-exitcode`는 exit code 0과 `No changes`를 반환했다.
