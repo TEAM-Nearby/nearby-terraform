@@ -1,0 +1,62 @@
+#!/bin/bash
+# Spring Boot 파일 로그와 CloudWatch Logs Agent를 구성합니다.
+set -euo pipefail
+
+for attempt in $(seq 1 60); do
+  if id nearby >/dev/null 2>&1 && systemctl cat nearby.service >/dev/null 2>&1 && ! pgrep -x dnf >/dev/null; then
+    break
+  fi
+
+  if [ "$attempt" -eq 60 ]; then
+    echo "nearby service prerequisites were not ready" >&2
+    exit 1
+  fi
+
+  sleep 5
+done
+
+dnf install -y amazon-cloudwatch-agent
+
+install -d -o nearby -g nearby -m 0750 /var/log/nearby
+install -d -m 0755 /etc/systemd/system/nearby.service.d
+
+cat >/etc/systemd/system/nearby.service.d/cloudwatch-logs.conf <<'DROPIN'
+[Service]
+Environment="LOGGING_FILE_NAME=/var/log/nearby/application.log"
+DROPIN
+
+install -d -m 0755 /opt/aws/amazon-cloudwatch-agent/etc
+cat >/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-agent.json <<'CONFIG'
+{
+  "agent": {
+    "region": "${aws_region}"
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/nearby/application.log",
+            "log_group_name": "${log_group_name}",
+            "log_stream_name": "{instance_id}"
+          }
+        ]
+      }
+    }
+  }
+}
+CONFIG
+
+systemctl daemon-reload
+systemctl restart nearby.service
+
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config \
+  -m ec2 \
+  -s \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/cloudwatch-agent.json
+
+systemctl enable amazon-cloudwatch-agent.service
+systemctl is-active --quiet nearby.service
+systemctl is-active --quiet amazon-cloudwatch-agent.service
+test -f /var/log/nearby/application.log
