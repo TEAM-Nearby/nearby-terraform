@@ -92,3 +92,14 @@
 - 배포 run은 테스트, bootJar, S3 업로드, SSM 배포, 외부 health check까지 성공했다.
 - 외부 `/actuator/health`의 `redis` component와 `/actuator/health/redis`가 모두 `UP`을 반환했다.
 - 적용과 배포 검증 후 `terraform plan -detailed-exitcode`는 exit code 0과 `No changes`를 반환했다.
+
+## 2026-07-12
+
+- 현재 우선순위는 메트릭, 알람, 트레이싱이 아니라 Spring Boot 운영 로그 조회이다.
+- Grafana Cloud는 이번 범위에서 제외하고 AWS CloudWatch Logs를 사용한다.
+- 수집 대상은 Caddy나 시스템 로그를 제외한 Spring Boot 애플리케이션 로그만으로 제한한다.
+- CloudWatch Logs 보관 기간은 14일로 한다.
+- Spring Boot는 `/var/log/nearby/application.log`에 로그를 기록하고 통합 CloudWatch Agent가 해당 파일만 수집한다.
+- 로그 그룹 이름은 `/nearby/prod/application`, 로그 스트림 이름은 EC2 instance id로 한다.
+- 기존 EC2를 교체하지 않고 SSM Association으로 멱등 적용하며 설정 반영 시 `nearby.service`를 한 번 재시작한다.
+- EC2 역할에는 로그 스트림 생성과 이벤트 전송에 필요한 최소 CloudWatch Logs 권한만 부여한다.

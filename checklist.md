@@ -53,3 +53,12 @@
 - [x] ElastiCache 상태와 SSM 파라미터를 검증한다.
 - [x] 백엔드를 배포하고 Redis health를 확인한다.
 - [x] 적용 후 Terraform plan이 `No changes`인지 확인한다.
+- [x] CloudWatch Logs 수집 범위와 보관 기간을 확정한다.
+- [x] Spring Boot 로그 수집 설계를 작성한다.
+- [ ] CloudWatch Logs 구현 계획을 작성한다.
+- [ ] CloudWatch 로그 그룹과 최소 IAM 권한을 추가한다.
+- [ ] 기존 EC2에 CloudWatch Agent와 Spring 로그 파일 설정을 적용한다.
+- [ ] Terraform formatting과 validate를 실행한다.
+- [ ] Terraform plan에서 변경 범위를 확인한다.
+- [ ] Terraform apply 후 CloudWatch 로그 유입을 확인한다.
+- [ ] 적용 후 Terraform plan이 `No changes`인지 확인한다.
